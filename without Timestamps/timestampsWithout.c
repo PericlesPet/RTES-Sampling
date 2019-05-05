@@ -66,17 +66,26 @@ void main(int argc, char const *argv[]) {
 
     time_shift = (real_dt-time_dt);
     time_shift_accum += time_shift;
+
+    //WRITE TO FILES
     fprintf(timestampsComplete,"%5d. real_dt = %f ||--|| time-shift accumulation = %f ||--|| virtual_time = %f ---- real_time = %f \n",(int)(i/time_dt+1),real_dt,time_shift_accum, i, real_total_time);
     fprintf(timestampsLean, "%f\n",time_shift);
-    // printf("time_dt = %f ---- real_dt = %f ||--|| time-shift = %f  ---- time-shift accumulation = %f ||--|| virtual_time = %f ---- real_time = %f \n",time_dt,real_dt,time_shift,time_shift_accum, i, real_total_time);
-    printf("%d. real_dt = %f ||--|| time-shift = %f  ---- time-shift accumulation = %f ||--|| virtual_time = %f ---- real_time = %f \n",(int)(i/time_dt+1),real_dt,time_shift,time_shift_accum, i, real_total_time);
+
+    // printf("%d. real_dt = %f ||--|| time-shift = %f  ---- time-shift accumulation = %f ||--|| virtual_time = %f ---- real_time = %f \n",(int)(i/time_dt+1),real_dt,time_shift,time_shift_accum, i, real_total_time);
+
+    if(0==((int)(i/time_dt+1)%600)){ //600 means 600 iterations, or 1 minute when dt = 0.1
+      minutes++;
+      printf("%d. iteration %d - time-shift accumulation = %f ||--|| virtual_time = %f ---- real_time = %f \n",minutes,(int)(i/time_dt+1),time_shift_accum, i, real_total_time);
+    }
+
     real_total_time += real_dt;
   }//END OF TIME LOOP
 
+  printf("%d. final iteration %d - time-shift accumulation = %f ||--|| virtual_time = %f ---- real_time = %f \n",minutes,(int)(i/time_dt+1),time_shift_accum, i, real_total_time);
+
+
   fclose(timestampsComplete);
   fclose(timestampsLean);
-
-  // timestampStats(targetFileNameLean,time_dt,total_time);
 
   return;
 }

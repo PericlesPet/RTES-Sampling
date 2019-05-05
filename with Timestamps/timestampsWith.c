@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
+
 // #include "timestamps.h"
 
 
@@ -52,31 +53,50 @@ void main(int argc, char const *argv[]) {
   float real_total_time=0;
   float time_shift;
   float time_shift_accum=0;
+  float time_shift_accum_ms=0;
+  float correction = 0;
+  int minutes=0;
 
   // TIME LOOP
   for(float i=0;i<total_time;i+=time_dt){
 
+    //CORRECTION -- this is the ONLY difference with timestampsWithout.c
+    if(time_shift_accum*1000>1){
+      correction = 1-(time_shift_accum*1000);
+      // printf(" **** correction: cor = %f, final = %f ****\n", correction,(time_dt_ms+correction));
+    }//End CORRECTION
 
     gettimeofday(&startwtime,NULL);
-    sleep_ms(time_dt_ms);
+    sleep_ms(time_dt_ms+correction);
     gettimeofday(&endwtime,NULL);
+
+    correction = 0; // reset correction
 
     real_dt = (float)((endwtime.tv_usec - startwtime.tv_usec)/1.0e6
   + endwtime.tv_sec - startwtime.tv_sec);
 
     time_shift = (real_dt-time_dt);
     time_shift_accum += time_shift;
+
+    //WRITE TO FILES
     fprintf(timestampsComplete,"%5d. real_dt = %f ||--|| time-shift accumulation = %f ||--|| virtual_time = %f ---- real_time = %f \n",(int)(i/time_dt+1),real_dt,time_shift_accum, i, real_total_time);
     fprintf(timestampsLean, "%f\n",time_shift);
-    // printf("time_dt = %f ---- real_dt = %f ||--|| time-shift = %f  ---- time-shift accumulation = %f ||--|| virtual_time = %f ---- real_time = %f \n",time_dt,real_dt,time_shift,time_shift_accum, i, real_total_time);
-    printf("%d. real_dt = %f ||--|| time-shift = %f  ---- time-shift accumulation = %f ||--|| virtual_time = %f ---- real_time = %f \n",(int)(i/time_dt+1),real_dt,time_shift,time_shift_accum, i, real_total_time);
+
+    // printf("%d. real_dt = %f ||--|| time-shift = %f  ---- time-shift accumulation = %f ||--|| virtual_time = %f ---- real_time = %f \n",(int)(i/time_dt+1),real_dt,time_shift,time_shift_accum, i, real_total_time);
+
+    if(0==((int)(i/time_dt+1)%600)){ //600 means 600 iterations, or 1 minute when dt = 0.1
+      minutes++;
+      printf("%d. iteration %d - time-shift accumulation = %f ||--|| virtual_time = %f ---- real_time = %f \n",minutes,(int)(i/time_dt+1),time_shift_accum, i, real_total_time);
+    }
+
     real_total_time += real_dt;
+
   }//END OF TIME LOOP
+
+  printf("%d. final iteration %d - time-shift accumulation = %f ||--|| virtual_time = %f ---- real_time = %f \n",minutes,(int)(i/time_dt+1),time_shift_accum, i, real_total_time);
 
   fclose(timestampsComplete);
   fclose(timestampsLean);
-
-  // timestampStats(targetFileNameLean,time_dt,total_time);
 
   return;
 }

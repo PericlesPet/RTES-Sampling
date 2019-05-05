@@ -1,10 +1,10 @@
 GCC = gcc
-# CFLAGS = -fopenmp -pthread -fcilkplus -O3 -msse
+# CFLAGS = -lm
 
 CMAIN=timestampsWith
 
 all: timestampsWith.o
-	$(GCC) $^ -o $(CMAIN)
+	$(GCC) $(CFLAGS) $^ -o $(CMAIN)
 
 %.o: %.c
 	$(GCC) -c $(CFLAGS) $^
