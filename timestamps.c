@@ -4,19 +4,49 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <string.h>
+#include "timestamps.h"
+
 
 void sleep_ms(int milliseconds);
 
 void main(int argc, char const *argv[]) {
   /* code */
   // INTRO
-  if (argc != 3){
-    printf("incorrect args --- total_time, dt \n");
+  if (argc != 4){
+    printf("incorrect args --- total_time, dt, target-filename \n");
     return;
   }
-  float total_time = atoi(argv[1]);
+
+  float total_time = atof(argv[1]);
   float time_dt = atof(argv[2]);
   float time_dt_ms = time_dt * 1000;
+
+// initialize files
+
+  int targetLength=strlen(argv[3]);
+  char *targetFileNameComplete = (char *)malloc(sizeof(char)*(targetLength+14)); //targetFileName_complete.txt\NULL = targetFileName + (_complete.txt\NULL)
+  char *targetFileNameLean = (char *)malloc(sizeof(char)*(targetLength+10)); //targetFileName_lean.txt\NULL = targetFileName + (_lean.txt\NULL)
+
+// targetFileNameComplete = targetFileName_complete.txt
+  strncpy(targetFileNameComplete,argv[3],targetLength);
+  strcat(targetFileNameComplete,"-complete.txt");
+
+// targetFileNameLean = targetFileName_lean.txt
+  strncpy(targetFileNameLean,argv[3],targetLength);
+  strcat(targetFileNameLean,"-lean.csv");
+
+  printf("Target Length: %d, Copied string: %s\n Copied String2: %s\n",targetLength, targetFileNameComplete,targetFileNameLean);
+
+  FILE *timestampsComplete = fopen(targetFileNameComplete,"w");
+  FILE *timestampsLean = fopen(targetFileNameLean,"w");
+
+
+  // strncpy()
+  // char *targetFileNameLean = argv[3];
+  //
+  // printf("string: %s \n",targetFileName);
+  // strcat()
 
   printf("Total Time = %f \nTime_dt = %f \nTime_dt_ms=%f\n\n",total_time,time_dt,time_dt_ms);
   // BEGIN
@@ -33,19 +63,24 @@ void main(int argc, char const *argv[]) {
 
     gettimeofday(&startwtime,NULL);
     sleep_ms(time_dt_ms);
-    // std::this_thread::sleep_for(std::chrono::milliseconds());
     gettimeofday(&endwtime,NULL);
 
-    // printf("%ld -- %ld -- %f -- %f \n",tv2.tv_usec,tv1.tv_usec,(float)((tv2.tv_usec)/1000000.0f),(tv1.tv_sec+tv1.tv_usec/1000000.0f));
     real_dt = (float)((endwtime.tv_usec - startwtime.tv_usec)/1.0e6
   + endwtime.tv_sec - startwtime.tv_sec);
 
     time_shift = (real_dt-time_dt);
     time_shift_accum += time_shift;
+    fprintf(timestampsComplete,"%5d. real_dt = %f ||--|| time-shift accumulation = %f ||--|| virtual_time = %f ---- real_time = %f \n",(int)(i/time_dt+1),real_dt,time_shift_accum, i, real_total_time);
+    fprintf(timestampsLean, "%f\n",time_shift);
     // printf("time_dt = %f ---- real_dt = %f ||--|| time-shift = %f  ---- time-shift accumulation = %f ||--|| virtual_time = %f ---- real_time = %f \n",time_dt,real_dt,time_shift,time_shift_accum, i, real_total_time);
-    printf(" real_dt = %f ||--|| time-shift = %f  ---- time-shift accumulation = %f ||--|| virtual_time = %f ---- real_time = %f \n",real_dt,time_shift,time_shift_accum, i, real_total_time);
+    // printf("%5d. real_dt = %f ||--|| time-shift = %f  ---- time-shift accumulation = %f ||--|| virtual_time = %f ---- real_time = %f \n",(int)(i/time_dt+1),real_dt,time_shift,time_shift_accum, i, real_total_time);
     real_total_time += real_dt;
-  }
+  }//END OF TIME LOOP
+
+  fclose(timestampsComplete);
+  fclose(timestampsLean);
+
+  // timestampStats(targetFileNameLean,time_dt,total_time);
 
   return;
 }
