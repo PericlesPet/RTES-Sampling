@@ -57,8 +57,9 @@ void main(int argc, char const *argv[]) {
   float correction = 0;
   int minutes=0;
 
+  float i=0;
   // TIME LOOP
-  for(float i=0;i<total_time;i+=time_dt){
+  for(i=0;i<total_time;i+=time_dt){
 
     //CORRECTION -- this is the ONLY difference with timestampsWithout.c
     if(time_shift_accum*1000>1){
@@ -93,7 +94,8 @@ void main(int argc, char const *argv[]) {
 
   }//END OF TIME LOOP
 
-  printf("%d. final iteration %d - time-shift accumulation = %f ||--|| virtual_time = %f ---- real_time = %f \n",minutes,(int)(i/time_dt+1),time_shift_accum, i, real_total_time);
+  printf("%d. iteration %d - time-shift accumulation = %f ||--|| virtual_time = %f ---- real_time = %f \n**Finished**\n",minutes,(int)(i/time_dt+1),time_shift_accum, i, real_total_time);
+  // printf("\nFinal iteration - time-shift accumulation = %f ||--|| virtual_time = %f ---- real_time = %f \n",time_shift_accum, i, real_total_time);
 
   fclose(timestampsComplete);
   fclose(timestampsLean);

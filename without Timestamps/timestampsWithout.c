@@ -52,9 +52,11 @@ void main(int argc, char const *argv[]) {
   float real_total_time=0;
   float time_shift;
   float time_shift_accum=0;
+  int minutes=0;
 
+  float i=0;
   // TIME LOOP
-  for(float i=0;i<total_time;i+=time_dt){
+  for(i=0;i<total_time;i+=time_dt){
 
 
     gettimeofday(&startwtime,NULL);
@@ -81,8 +83,7 @@ void main(int argc, char const *argv[]) {
     real_total_time += real_dt;
   }//END OF TIME LOOP
 
-  printf("%d. final iteration %d - time-shift accumulation = %f ||--|| virtual_time = %f ---- real_time = %f \n",minutes,(int)(i/time_dt+1),time_shift_accum, i, real_total_time);
-
+  printf("%d. iteration %d - time-shift accumulation = %f ||--|| virtual_time = %f ---- real_time = %f \n**Finished**\n",minutes,(int)(i/time_dt+1),time_shift_accum, i, real_total_time);
 
   fclose(timestampsComplete);
   fclose(timestampsLean);
