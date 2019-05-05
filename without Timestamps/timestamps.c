@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
-#include "timestamps.h"
+// #include "timestamps.h"
 
 
 void sleep_ms(int milliseconds);
@@ -25,18 +25,18 @@ void main(int argc, char const *argv[]) {
   // Initialize & Open FILES
 
   int targetLength=strlen(argv[3]);
-  char *targetFileNameComplete = (char *)malloc(sizeof(char)*(targetLength+24)); // ./Results/targetFileName_complete.txt\NULL = "./Results/" + targetFileName + "-complete.txt\NULL"
-  char *targetFileNameLean = (char *)malloc(sizeof(char)*(targetLength+20)); // ./Results/targetFileName_lean.txt\NULL = "./Results/" + targetFileName + "-lean.txt\NULL"
+  char *targetFileNameComplete = (char *)malloc(sizeof(char)*(targetLength+29)); // ./../Results/targetFileName_completeWo.txt\NULL = "./../Results/" + targetFileName + "-completeWo.txt\NULL"
+  char *targetFileNameLean = (char *)malloc(sizeof(char)*(targetLength+25)); // ./Results/targetFileName_leanWo.txt\NULL = "./../Results/" + targetFileName + "-leanWo.txt\NULL"
 
   // targetFileNameComplete = ./Results/targetFileName-complete.txt
-  strcpy(targetFileNameComplete,"./Results/");
+  strcpy(targetFileNameComplete,"./../Results/");
   strncat(targetFileNameComplete,argv[3],targetLength);
-  strcat(targetFileNameComplete,"-complete.txt");
+  strcat(targetFileNameComplete,"-completeWo.txt");
 
   // targetFileNameLean = ./Results/targetFileName-lean.csv
-  strcpy(targetFileNameLean,"./Results/");
+  strcpy(targetFileNameLean,"./../Results/");
   strncat(targetFileNameLean,argv[3],targetLength);
-  strcat(targetFileNameLean,"-lean.csv");
+  strcat(targetFileNameLean,"-leanWo.csv");
 
   // printf("Target Length: %d, Copied string: %s\n Copied String2: %s\n",targetLength, targetFileNameComplete,targetFileNameLean);
 
