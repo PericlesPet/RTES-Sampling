@@ -1,9 +1,9 @@
 GCC = gcc
 # CFLAGS = -fopenmp -pthread -fcilkplus -O3 -msse
 
-CMAIN=timestamps
+CMAIN=timestampsWith
 
-all: timestamps.o timestamps-stats.o
+all: timestampsWith.o
 	$(GCC) $^ -o $(CMAIN)
 
 %.o: %.c

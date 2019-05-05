@@ -1,4 +1,7 @@
-results_filename = ls ("*.csv")
+cd Results/
+tsWithout_filename = ls ("*Wo.csv")
+tsWith_filename = ls ("*With.csv")
+
 timeshiftVector = load(results_filename);
 
 timeshiftVector_ms = timeshiftVector*1000;
@@ -14,4 +17,5 @@ rowNames = {'without timestamps','with timestamps'};
 colNames = {'mean','std','median','max','min'};
 sTable = array2table(sample,'RowNames',rowNames,'VariableNames',colNames);
 
+cd ..
 save("res_labels.mat","sTable")
