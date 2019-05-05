@@ -12,7 +12,7 @@ void sleep_ms(int milliseconds);
 
 void main(int argc, char const *argv[]) {
   /* code */
-  // INTRO
+  // INTRO & Argument Conversion
   if (argc != 4){
     printf("incorrect args --- total_time, dt, target-filename \n");
     return;
@@ -22,34 +22,30 @@ void main(int argc, char const *argv[]) {
   float time_dt = atof(argv[2]);
   float time_dt_ms = time_dt * 1000;
 
-// initialize files
+  // Initialize & Open FILES
 
   int targetLength=strlen(argv[3]);
-  char *targetFileNameComplete = (char *)malloc(sizeof(char)*(targetLength+14)); //targetFileName_complete.txt\NULL = targetFileName + (_complete.txt\NULL)
-  char *targetFileNameLean = (char *)malloc(sizeof(char)*(targetLength+10)); //targetFileName_lean.txt\NULL = targetFileName + (_lean.txt\NULL)
+  char *targetFileNameComplete = (char *)malloc(sizeof(char)*(targetLength+24)); // ./Results/targetFileName_complete.txt\NULL = "./Results/" + targetFileName + "-complete.txt\NULL"
+  char *targetFileNameLean = (char *)malloc(sizeof(char)*(targetLength+20)); // ./Results/targetFileName_lean.txt\NULL = "./Results/" + targetFileName + "-lean.txt\NULL"
 
-// targetFileNameComplete = targetFileName_complete.txt
-  strncpy(targetFileNameComplete,argv[3],targetLength);
+  // targetFileNameComplete = ./Results/targetFileName-complete.txt
+  strcpy(targetFileNameComplete,"./Results/");
+  strncat(targetFileNameComplete,argv[3],targetLength);
   strcat(targetFileNameComplete,"-complete.txt");
 
-// targetFileNameLean = targetFileName_lean.txt
-  strncpy(targetFileNameLean,argv[3],targetLength);
+  // targetFileNameLean = ./Results/targetFileName-lean.csv
+  strcpy(targetFileNameLean,"./Results/");
+  strncat(targetFileNameLean,argv[3],targetLength);
   strcat(targetFileNameLean,"-lean.csv");
 
-  printf("Target Length: %d, Copied string: %s\n Copied String2: %s\n",targetLength, targetFileNameComplete,targetFileNameLean);
+  // printf("Target Length: %d, Copied string: %s\n Copied String2: %s\n",targetLength, targetFileNameComplete,targetFileNameLean);
 
   FILE *timestampsComplete = fopen(targetFileNameComplete,"w");
   FILE *timestampsLean = fopen(targetFileNameLean,"w");
 
 
-  // strncpy()
-  // char *targetFileNameLean = argv[3];
-  //
-  // printf("string: %s \n",targetFileName);
-  // strcat()
-
-  printf("Total Time = %f \nTime_dt = %f \nTime_dt_ms=%f\n\n",total_time,time_dt,time_dt_ms);
   // BEGIN
+  printf("Total Time = %f \nTime_dt = %f \nTime_dt_ms=%f\n\n",total_time,time_dt,time_dt_ms);
   struct timeval startwtime;
   struct timeval endwtime;
   float real_dt;
@@ -73,7 +69,7 @@ void main(int argc, char const *argv[]) {
     fprintf(timestampsComplete,"%5d. real_dt = %f ||--|| time-shift accumulation = %f ||--|| virtual_time = %f ---- real_time = %f \n",(int)(i/time_dt+1),real_dt,time_shift_accum, i, real_total_time);
     fprintf(timestampsLean, "%f\n",time_shift);
     // printf("time_dt = %f ---- real_dt = %f ||--|| time-shift = %f  ---- time-shift accumulation = %f ||--|| virtual_time = %f ---- real_time = %f \n",time_dt,real_dt,time_shift,time_shift_accum, i, real_total_time);
-    // printf("%5d. real_dt = %f ||--|| time-shift = %f  ---- time-shift accumulation = %f ||--|| virtual_time = %f ---- real_time = %f \n",(int)(i/time_dt+1),real_dt,time_shift,time_shift_accum, i, real_total_time);
+    printf("%d. real_dt = %f ||--|| time-shift = %f  ---- time-shift accumulation = %f ||--|| virtual_time = %f ---- real_time = %f \n",(int)(i/time_dt+1),real_dt,time_shift,time_shift_accum, i, real_total_time);
     real_total_time += real_dt;
   }//END OF TIME LOOP
 
