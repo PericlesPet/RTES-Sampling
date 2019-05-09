@@ -1,10 +1,10 @@
 # RTES-Sampling
 Given a time period t, sample every dt seconds and sleep in between.
 
-##Running
+## Running
 
 
-###WITH TIMESTAMS
+### WITH TIMESTAMS
 
 from main directory
 
@@ -15,7 +15,7 @@ timestampsWith 7200 0.1 desired_filename
 ```
 
 
-###WITHOUT TIMESTAMPS
+### WITHOUT TIMESTAMPS
 
 from main directory
 
@@ -27,7 +27,7 @@ timestampsWithout 7200 0.1 desired_filename
 
 
 
-##GETTING STATISTICS
+## GETTING STATISTICS
 
 from main directory
 
