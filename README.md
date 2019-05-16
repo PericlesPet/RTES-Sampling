@@ -4,7 +4,7 @@ Given a time period t, sample every dt seconds and sleep in between.
 ## Running
 
 
-### WITH TIMESTAMS
+### WITH TIMESTAMPS
 
 from main directory
 
